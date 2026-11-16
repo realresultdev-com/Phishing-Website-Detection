@@ -1,0 +1,71 @@
+# Phishing XAI – .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.manifest
+*.spec
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (keep .gitkeep, ignore real data files)
+data/raw/*.csv
+data/raw/*.zip
+data/raw/*.xlsx
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Artifacts (keep .gitkeep)
+artifacts/plots/*
+artifacts/metrics/*
+artifacts/*.joblib
+artifacts/*.json
+artifacts/*.pkl
+!artifacts/plots/.gitkeep
+!artifacts/metrics/.gitkeep
+
+# TLD cache
+.tld_cache/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.tmp
