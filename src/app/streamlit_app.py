@@ -356,25 +356,40 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-        example_urls = [
-            "Select an example URL...",
-            "https://www.paypal.com/signin",
-            "http://192.168.1.50/paypal-update/login.php",
-            "https://www.google.com/search?q=machine+learning",
-            "http://paypal-account-verify.xyz/login.php",
-            "https://github.com/security/advisories",
-            "http://www.paypa1.com/login"
-        ]
-        selected_example = st.selectbox("Try an example URL:", example_urls)
+        if "url_input_value" not in st.session_state:
+            st.session_state["url_input_value"] = "https://www.paypal.com/signin"
 
-        default_input = "" if selected_example == example_urls[0] else selected_example
-        input_url = st.text_input("Enter URL to check:", value=default_input, placeholder="https://example.com/page")
+        input_url = st.text_input(
+            "Enter website link (URL):",
+            value=st.session_state["url_input_value"],
+            placeholder="https://example.com/page"
+        )
 
+        st.caption("Or click an example to test:")
+        col_s1, col_s2, col_s3, col_s4 = st.columns(4)
+        with col_s1:
+            if st.button("PayPal (Safe)", key="btn_paypal", use_container_width=True):
+                st.session_state["url_input_value"] = "https://www.paypal.com/signin"
+                st.rerun()
+        with col_s2:
+            if st.button("Google (Safe)", key="btn_google", use_container_width=True):
+                st.session_state["url_input_value"] = "https://www.google.com/search?q=machine+learning"
+                st.rerun()
+        with col_s3:
+            if st.button("Fake PayPal (.xyz)", key="btn_fake_pp", use_container_width=True):
+                st.session_state["url_input_value"] = "http://paypal-account-verify.xyz/login.php"
+                st.rerun()
+        with col_s4:
+            if st.button("Malicious IP (.php)", key="btn_ip_phish", use_container_width=True):
+                st.session_state["url_input_value"] = "http://192.168.1.50/paypal-update/login.php"
+                st.rerun()
+
+        st.write("")
         col_btn, _ = st.columns([1, 4])
         with col_btn:
             check_clicked = st.button("Check URL", type="primary", use_container_width=True)
 
-        if check_clicked or (selected_example != example_urls[0] and input_url):
+        if check_clicked or input_url:
             if not input_url.strip():
                 st.warning("Please enter a URL to analyze.")
             elif not model_loaded:
