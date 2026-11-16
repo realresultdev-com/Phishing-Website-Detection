@@ -172,6 +172,13 @@ def extract_features(url: str) -> dict:
         fragment = parsed.fragment or ""
         scheme   = parsed.scheme or ""
 
+        # Canonicalize root URL: trailing slash on root domain (e.g. "https://domain.com/")
+        # is the root path delimiter. Strip it so "domain.com/" and "domain.com" produce
+        # identical canonical features.
+        if path == "/" and not query and not fragment:
+            url = url.rstrip("/")
+            path = ""
+
         # tldextract for domain decomposition
         ext = _EXTRACTOR(url)
         subdomain = ext.subdomain or ""
@@ -234,7 +241,8 @@ def extract_features(url: str) -> dict:
         # ------------------------------------------------------------------ #
         # GROUP 5 — Path/query features
         # ------------------------------------------------------------------ #
-        path_depth = path.count("/")                                     # rationale: very deep paths hide destination
+        path_segments = [p for p in path.split("/") if p]
+        path_depth = len(path_segments)                                   # rationale: true directory path nesting depth
         num_query_params = len(parse_qs(query))                          # rationale: many params = tracking/obfuscation
         has_double_slash = int("//" in path)                             # rationale: double slash = redirect trick
         # file_extension: 1 if path ends in a known suspicious extension

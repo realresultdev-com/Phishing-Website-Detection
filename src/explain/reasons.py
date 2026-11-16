@@ -83,7 +83,21 @@ FEATURE_EXPLANATIONS = {
 
 def format_risk_factor(feature: str, value: float, attribution: float, is_risk: bool = True) -> str:
     """Format a single feature attribution into human-readable text."""
+    # Clean floating negative zero
+    if isinstance(value, (int, float)) and abs(value) < 1e-5:
+        value = 0.0
+
     template = FEATURE_EXPLANATIONS.get(feature, f"Feature '{feature}' value is {value}")
+
+    # Specific human context overrides for low/benign values
+    if feature == "path_entropy" and value <= 0.1:
+        template = "URL path has zero character entropy"
+    elif feature == "count_slashes" and value <= 2:
+        template = "Standard web protocol structure ({value} slashes)"
+    elif feature == "count_dots" and value <= 1:
+        template = "Standard single domain dot separator ({value})"
+    elif feature == "num_subdomains" and value == 0:
+        template = "Direct apex domain (0 subdomains)"
     
     # Try formatting with value if template has placeholder
     try:
