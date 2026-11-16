@@ -23,11 +23,29 @@ flowchart LR
     C --> G["Evaluation Report\nmetrics/"]
 ```
 
-## Quick Start
+## ⚡ Quick Start (1-Click Launch)
+
+If you downloaded or extracted this project, you can run it with a single click:
+
+- **Windows:** Double-click **`run.bat`** (or run `run.bat` in Command Prompt)
+- **Linux / macOS:** Run **`./run.sh`** in terminal (`chmod +x run.sh && ./run.sh`)
+- **Any Platform:** Run **`python run.py`**
+
+> **What the 1-click script does automatically:**
+> 1. Verifies Python 3.10+ installation
+> 2. Sets up and activates a virtual environment (`venv`)
+> 3. Installs all required dependencies from `requirements.txt`
+> 4. Verifies model artifacts (auto-trains the model if first run)
+> 5. Opens your default web browser to `http://localhost:8501`
+> 6. Starts the Streamlit dashboard
+
+---
+
+## Manual Step-by-Step Setup
 
 ```bash
 # 1. Install dependencies
-make setup
+make setup   # or pip install -r requirements.txt
 
 # 2. Download (or generate synthetic) data
 make data
